@@ -8,7 +8,7 @@ namespace PortMidi
 {
     public static class MidiDeviceManager
     {
-        private const int DefaultBufferSize = 1024;
+        public static int DefaultBufferSize { get; set; } = 1024;
 
         static MidiDeviceManager()
         {
@@ -55,10 +55,10 @@ namespace PortMidi
             return new MidiInput(stream, inputDevice);
         }
 
-        public static MidiOutput OpenOutput(PmDeviceID outputDevice)
+        public static MidiOutput OpenOutput(PmDeviceID outputDevice, int latency = 0)
         {
             PortMidiStream stream;
-            var e = PortMidiMarshal.Pm_OpenOutput(out stream, outputDevice, IntPtr.Zero, 0, null, IntPtr.Zero, 0);
+            var e = PortMidiMarshal.Pm_OpenOutput(out stream, outputDevice, IntPtr.Zero, DefaultBufferSize, null, IntPtr.Zero, latency);
             if (e != PmError.NoError)
             {
                 throw new MidiException(e, $"Failed to open MIDI output device {e}");
