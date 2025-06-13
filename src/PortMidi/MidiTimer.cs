@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using static PortMidi.PortMidiMarshal;
 using PmError = PortMidi.MidiErrorType;
 
@@ -8,15 +7,17 @@ namespace PortMidi
 	public class MidiTimer
 	{
 		public static void Sleep(int milliseconds) => Pt_Sleep(milliseconds);
-		
+
 		public static void Start(int resolution)
 		{
-			var e = Pt_Start(resolution, TimerProcCallback, IntPtr.Zero);
+			var e = Pt_Start(resolution, TimerDelegate, IntPtr.Zero);
 			if (e != PmError.NoError)
 			{
 				throw new MidiException(e, $"Failed to open MIDI input device {e}");
 			}
 		}
+
+		private static readonly PtStartProcDelegate TimerDelegate = TimerProcCallback;
 
 		private static void TimerProcCallback(int milliseconds, IntPtr userdata)
 		{
