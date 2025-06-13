@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using System.Threading;
-using PortMidi;
 using NUnit.Framework;
 
-public class EqualExamples
+namespace PortMidi.Tests;
+
+public class PhysicalDeviceTests
 {
 	[Test]
-	public void EqualStringIgnoreCase()
+	public void SendWithLatency()
 	{
 		var devices = MidiDeviceManager.AllDevices;
 		foreach (var device in devices)
